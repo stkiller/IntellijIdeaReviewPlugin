@@ -16,18 +16,12 @@
     </project-components>
 
     <actions>
-        <!-- Add your actions here -->
-        <!--<action id="generateComparisonChain" class="myToolWindow.MyToolWindowFactory"-->
-                <!--text="Add reject reason"-->
-                <!--description="Adds a reject reason" keymap="Alt+F1">-->
-            <!--<add-to-group group-id="GenerateGroup" anchor="last"/>-->
-        <!--</action>-->
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
         <toolWindow id="Sample Calendar" secondary="true" icon="/myToolWindow/plus.png" anchor="right"
-                    factoryClass="myToolWindow.MyToolWindowFactory">
+                    factoryClass="myToolWindow.RejectReasonToolWindow">
 
         </toolWindow>
     </extensions>
