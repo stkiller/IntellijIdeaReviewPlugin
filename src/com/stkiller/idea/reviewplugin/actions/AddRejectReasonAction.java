@@ -1,4 +1,4 @@
-package myToolWindow;
+package com.stkiller.idea.reviewplugin.actions;
 
 import com.intellij.codeInsight.TargetElementUtilBase;
 import com.intellij.ide.actions.CopyReferenceAction;
@@ -23,43 +23,39 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
 import com.intellij.util.LogicalRoot;
 import com.intellij.util.LogicalRootsManager;
+import com.stkiller.idea.reviewplugin.GenerateDialog;
+import com.stkiller.idea.reviewplugin.interfaces.RejectListenerInteractor;
+import com.stkiller.idea.reviewplugin.interfaces.RejectReasonListener;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Andrei Podoprigora (07/12/2012)
  */
-public class AddRejectReasonAction extends AnAction {
+public class AddRejectReasonAction extends AnAction implements RejectListenerInteractor {
 
-    private final RejectReasonListener rejectReasonListener;
+    private RejectReasonListener rejectReasonListener;
 
 
-    public AddRejectReasonAction(final RejectReasonListener aRejectReasonListener) {
-        super("Add Reject Reason");
-        rejectReasonListener = aRejectReasonListener;
-
+    public void setRejectReasonListener(final RejectReasonListener aReasonListener) {
+        rejectReasonListener = aReasonListener;
     }
-
 
     @Override
     public void actionPerformed(final AnActionEvent aEvent) {
-        final GenerateDialog dlg = new GenerateDialog(getProject(aEvent));
+        final GenerateDialog dlg = new GenerateDialog();
+        final String elementFQN = getCaretElementFQN(aEvent);
         dlg.show();
         if (dlg.isOK()) {
-            rejectReasonListener.fireAddRejectReason(getCarretElementFQN(aEvent) + "\n" + dlg.getComment());
+            rejectReasonListener.fireAddRejectReason(elementFQN + "\n" + dlg.getComment());
         }
     }
 
 
-    private Project getProject(final AnActionEvent aEvent) {
+    private String getCaretElementFQN(final AnActionEvent aEvent) {
         final DataContext dataContext = aEvent.getDataContext();
-        return PlatformDataKeys.PROJECT.getData(dataContext);
-    }
 
-
-    private String getCarretElementFQN(final AnActionEvent aEvent) {
-        final DataContext dataContext = aEvent.getDataContext();
-        final Editor editor = PlatformDataKeys.EDITOR.getData(dataContext);
         final Project project = PlatformDataKeys.PROJECT.getData(dataContext);
+        final Editor editor = PlatformDataKeys.EDITOR.getData(dataContext);
         final PsiElement elementAt = getElement(editor, dataContext);
         String elementFqn = CopyReferenceAction.elementToFqn(elementAt, editor);
         if (elementFqn == null && editor != null && project != null) {
@@ -69,8 +65,6 @@ public class AddRejectReasonAction extends AnAction {
                 elementFqn = getFileFqn(file) + ":" + (editor.getCaretModel().getLogicalPosition().line + 1);
             }
         }
-//        System.out.println(elementAt.getText());
-//        System.out.println(elementAt.getNextSibling().getText());
         return elementFqn;
     }
 

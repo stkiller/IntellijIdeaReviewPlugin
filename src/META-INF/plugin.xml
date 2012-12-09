@@ -16,13 +16,26 @@
     </project-components>
 
     <actions>
+        <action icon="/com/stkiller/idea/reviewplugin/icons/plus.png" id="review_aid.add_reason" class="com.stkiller.idea.reviewplugin.actions.AddRejectReasonAction" text="Add Reject Reason"
+                description="Adds a new review reject reason">
+            <keyboard-shortcut keymap="$default" first-keystroke="meta alt R"/>
+        </action>
+        <action icon="/com/stkiller/idea/reviewplugin/icons/plus.png" id="review_aid.clear_reasons" class="com.stkiller.idea.reviewplugin.actions.ClearReasonsAction" text="Clear Reasons"
+                description="Clears all reject reasons"/>
+        <group id="review_aid" text="Review Aid" description="Review aid plugin">
+            <add-to-group group-id="GenerateGroup"/>
+            <reference id="review_aid.add_reason"/>
+            <reference id="review_aid.clear_reasons"/>
+        </group>
+        <group id="review_aid.toolbar_actions">
+            <reference id="review_aid.clear_reasons"/>
+        </group>
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
         <toolWindow id="Review Aid" secondary="true" icon="/myToolWindow/plus.png" anchor="bottom"
-                    factoryClass="myToolWindow.RejectReasonToolWindow">
-
+                    factoryClass="com.stkiller.idea.reviewplugin.RejectReasonToolWindow">
         </toolWindow>
     </extensions>
 </idea-plugin>
