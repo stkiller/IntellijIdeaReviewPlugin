@@ -16,11 +16,11 @@
     </project-components>
 
     <actions>
-        <action icon="/com/stkiller/idea/reviewplugin/icons/plus.png" id="review_aid.add_reason" class="com.stkiller.idea.reviewplugin.actions.AddRejectReasonAction" text="Add Reject Reason"
+        <action icon="/com/stkiller/idea/reviewplugin/icons/add.png" id="review_aid.add_reason" class="com.stkiller.idea.reviewplugin.actions.AddRejectReasonAction" text="Add Reject Reason"
                 description="Adds a new review reject reason">
             <keyboard-shortcut keymap="$default" first-keystroke="meta alt R"/>
         </action>
-        <action icon="/com/stkiller/idea/reviewplugin/icons/plus.png" id="review_aid.clear_reasons" class="com.stkiller.idea.reviewplugin.actions.ClearReasonsAction" text="Clear Reasons"
+        <action icon="/com/stkiller/idea/reviewplugin/icons/delete.png" id="review_aid.clear_reasons" class="com.stkiller.idea.reviewplugin.actions.ClearReasonsAction" text="Clear Reasons"
                 description="Clears all reject reasons"/>
         <group id="review_aid" text="Review Aid" description="Review aid plugin">
             <add-to-group group-id="GenerateGroup"/>
