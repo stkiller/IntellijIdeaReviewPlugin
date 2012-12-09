@@ -1,14 +1,13 @@
 package myToolWindow;
 
+import java.awt.BorderLayout;
+
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.LabeledComponent;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiField;
-import com.intellij.ui.CollectionListModel;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -16,29 +15,36 @@ import org.jetbrains.annotations.Nullable;
  */
 public class GenerateDialog extends DialogWrapper {
 
-    private final JTextField label;
-    private CollectionListModel<PsiField> myFields;
-    private final LabeledComponent<JPanel> myComponent;
+    private final JTextField textField;
+    private final JPanel panel;
 
-    public GenerateDialog(PsiClass psiClass) {
-        super(psiClass.getProject());
-        setTitle("Please provide a comment, if any");
+    public GenerateDialog(final Project aProject) {
+        super(aProject);
+        setTitle("Please Provide a Comment, if Any");
 
-        label = new JTextField("This is a comment");
-        JPanel panel = new JPanel();
-        panel.add(label);
-        myComponent = LabeledComponent.create(panel, "Fields to include in compareTo():");
+        textField = new JTextField();
+        panel = new JPanel(new BorderLayout());
+        panel.add(textField, BorderLayout.CENTER);
 
         init();
+        pack();
     }
+
+
+    @Nullable
+    @Override
+    public JComponent getPreferredFocusedComponent() {
+        return textField;
+    }
+
 
     @Nullable
     @Override
     protected JComponent createCenterPanel() {
-        return myComponent;
+        return panel;
     }
 
     public String getComment() {
-        return label.getText();
+        return textField.getText();
     }
 }
