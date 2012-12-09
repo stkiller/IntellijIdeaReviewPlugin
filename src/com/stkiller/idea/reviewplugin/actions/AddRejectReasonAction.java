@@ -49,8 +49,9 @@ public class AddRejectReasonAction extends AnAction implements RejectListenerInt
 
     @Override
     public void actionPerformed(final AnActionEvent aEvent) {
+        String elementFQN = getCaretElementFQN(aEvent);
+        elementFQN = "{noformat}" + elementFQN + "{noformat}";
         final GenerateDialog dlg = new GenerateDialog();
-        final String elementFQN = getCaretElementFQN(aEvent);
         dlg.show();
         if (dlg.isOK()) {
             rejectReasonListener.fireAddRejectReason(elementFQN + "\n" + dlg.getComment());

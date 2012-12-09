@@ -36,7 +36,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <toolWindow id="Review Aid" secondary="true" icon="/myToolWindow/plus.png" anchor="bottom"
+        <toolWindow id="Review Aid" secondary="true" icon="/com/stkiller/idea/reviewplugin/icons/review.png" anchor="bottom"
                     factoryClass="com.stkiller.idea.reviewplugin.RejectReasonToolWindow">
         </toolWindow>
     </extensions>
