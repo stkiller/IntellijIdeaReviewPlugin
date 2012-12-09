@@ -73,4 +73,10 @@ public class RejectReasonToolWindow implements ToolWindowFactory, RejectReasonLi
     public void resetRejectReasons() {
         textArea.setText("");
     }
+
+
+    @Override
+    public String getGeneratedRejectReasons() {
+        return textArea.getText();
+    }
 }

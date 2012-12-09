@@ -23,9 +23,11 @@
         <action icon="/com/stkiller/idea/reviewplugin/icons/delete.png" id="review_aid.clear_reasons" class="com.stkiller.idea.reviewplugin.actions.ClearReasonsAction" text="Clear Reasons"
                 description="Clears all reject reasons"/>
         <group id="review_aid" text="Review Aid" description="Review aid plugin">
-            <add-to-group group-id="GenerateGroup"/>
+            <add-to-group group-id="CodeMenu" anchor="last"/>
+            <separator/>
             <reference id="review_aid.add_reason"/>
             <reference id="review_aid.clear_reasons"/>
+            <separator/>
         </group>
         <group id="review_aid.toolbar_actions">
             <reference id="review_aid.clear_reasons"/>

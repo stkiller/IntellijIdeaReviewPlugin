@@ -10,4 +10,6 @@ public interface RejectReasonListener {
 
     public void resetRejectReasons();
 
+    public String getGeneratedRejectReasons();
+
 }

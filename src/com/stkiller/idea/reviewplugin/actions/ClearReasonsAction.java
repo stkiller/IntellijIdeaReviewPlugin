@@ -14,7 +14,14 @@ public class ClearReasonsAction extends AnAction implements RejectListenerIntera
     private RejectReasonListener reasonListener;
 
 
-    public void actionPerformed(AnActionEvent e) {
+    @Override
+    public void update(final AnActionEvent e) {
+        final String rejectReasons = reasonListener.getGeneratedRejectReasons();
+        e.getPresentation().setEnabled(rejectReasons != null && !rejectReasons.isEmpty());
+    }
+
+
+    public void actionPerformed(final AnActionEvent e) {
         reasonListener.resetRejectReasons();
 
     }

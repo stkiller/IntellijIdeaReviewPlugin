@@ -40,6 +40,13 @@ public class AddRejectReasonAction extends AnAction implements RejectListenerInt
         rejectReasonListener = aReasonListener;
     }
 
+
+    @Override
+    public void update(final AnActionEvent aEvent) {
+        aEvent.getPresentation().setEnabled(getCaretElementFQN(aEvent) != null);
+    }
+
+
     @Override
     public void actionPerformed(final AnActionEvent aEvent) {
         final GenerateDialog dlg = new GenerateDialog();
