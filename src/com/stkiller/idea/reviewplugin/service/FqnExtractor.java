@@ -31,17 +31,31 @@ import org.jetbrains.annotations.Nullable;
 
 public class FqnExtractor {
 
-    public FqnExtractor() {
+    private String elementFqn;
+
+
+    private String elementLine;
+
+    public String getElementFqn() {
+        return elementFqn;
     }
 
 
-    public String getCaretElementFQN(final AnActionEvent aEvent) {
+    public String getElementLine() {
+        return elementLine;
+    }
+
+
+    public boolean processCaretElementFQN(final AnActionEvent aEvent) {
+        elementFqn = null;
+        elementLine = null;
+
         final DataContext dataContext = aEvent.getDataContext();
 
         final Project project = PlatformDataKeys.PROJECT.getData(dataContext);
         final Editor editor = PlatformDataKeys.EDITOR.getData(dataContext);
         final PsiElement elementAt = getElement(editor, dataContext);
-        String elementFqn = getElementFqn(editor, elementAt);
+        elementFqn = getElementFqn(editor, elementAt);
         if (editor != null && project != null) {
             final Document document = editor.getDocument();
             final PsiFile file = PsiDocumentManager.getInstance(project).getCachedPsiFile(document);
@@ -49,10 +63,10 @@ public class FqnExtractor {
                 if (elementFqn == null) {
                     elementFqn = getFileFqn(file);
                 }
-                elementFqn += ":" + (editor.getCaretModel().getLogicalPosition().line + 1);
+                elementLine = ""+(editor.getCaretModel().getLogicalPosition().line + 1);
             }
         }
-        return elementFqn;
+        return elementFqn != null && elementLine != null;
     }
 
 

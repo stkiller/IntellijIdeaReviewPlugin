@@ -7,7 +7,10 @@
     <idea-version since-build="8000"/>
     -->
     <application-components>
-        <!-- Add your application components here -->
+        <component>
+            <implementation-class>com.stkiller.idea.reviewplugin.settings.ReviewAidSettingsHolder</implementation-class>
+            <interface-class>com.stkiller.idea.reviewplugin.settings.ReviewAidSettingsHolder</interface-class>
+        </component>
     </application-components>
 
     <project-components>
@@ -46,5 +49,6 @@
         <toolWindow id="Review Aid" secondary="true" icon="/com/stkiller/idea/reviewplugin/icons/review.png" anchor="bottom"
                     factoryClass="com.stkiller.idea.reviewplugin.RejectReasonToolWindow">
         </toolWindow>
+        <applicationConfigurable instance="com.stkiller.idea.reviewplugin.settings.ReviewAidSettings"/>
     </extensions>
 </idea-plugin>

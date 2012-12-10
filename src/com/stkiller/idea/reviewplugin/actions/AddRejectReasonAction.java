@@ -31,17 +31,18 @@ public class AddRejectReasonAction extends AnAction implements RejectListenerInt
 
     @Override
     public void update(final AnActionEvent aEvent) {
-        aEvent.getPresentation().setEnabled(fqnExtractor.getCaretElementFQN(aEvent) != null);
+        aEvent.getPresentation().setEnabled(fqnExtractor.processCaretElementFQN(aEvent));
     }
 
 
     @Override
     public void actionPerformed(final AnActionEvent aEvent) {
-        final String elementFQN = fqnExtractor.getCaretElementFQN(aEvent);
+        fqnExtractor.processCaretElementFQN(aEvent);
         final GenerateDialog dlg = new GenerateDialog();
         dlg.show();
         if (dlg.isOK()) {
-            rejectReasonListener.fireAddRejectReason(reasonFormatter.getFormattedReason(elementFQN, dlg.getComment()));
+            rejectReasonListener.fireAddRejectReason(reasonFormatter.getFormattedReason(fqnExtractor.getElementFqn(),
+                                                                                        fqnExtractor.getElementLine(), dlg.getComment()));
         }
     }
 
