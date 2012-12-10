@@ -1,1 +1,4 @@
-This file was created by IntelliJ IDEA 12.0 for binding GitHub repository
+Intellij Idea plugin that can be used to quickly create a list of issues related to the code.
+It takes slighty modified version of command ( Ctrl + Shift + Alt + C ), 
+displays a dialog that allows to add a comment to the target code pointer.
+After that, formates this code pointer and comment to the Jira comment format.
