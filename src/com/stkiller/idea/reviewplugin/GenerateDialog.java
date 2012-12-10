@@ -1,10 +1,11 @@
 package com.stkiller.idea.reviewplugin;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.JTextArea;
 
 import com.intellij.openapi.ui.DialogWrapper;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class GenerateDialog extends DialogWrapper {
 
-    private final JTextField textField;
+    private final JTextArea textField;
     private final JPanel panel;
 
 
@@ -22,7 +23,9 @@ public class GenerateDialog extends DialogWrapper {
         super(null);
         setTitle("Please Provide a Comment, if Any");
 
-        textField = new JTextField();
+        textField = new JTextArea();
+//        textField.setMinimumSize(new Dimension(300, 100));
+        textField.setPreferredSize(new Dimension(300, 100));
         panel = new JPanel(new BorderLayout());
         panel.add(textField, BorderLayout.CENTER);
 

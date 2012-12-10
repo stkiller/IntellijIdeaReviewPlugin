@@ -48,7 +48,6 @@ public class RejectReasonToolWindow implements ToolWindowFactory, RejectReasonLi
     // Create the tool window content.
     public void createToolWindowContent(final Project project, final ToolWindow toolWindow) {
         final ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-        textArea.setEditable(false);
         final JPanel jPanel = new JPanel(new BorderLayout());
         final JBScrollPane scrollPane = new JBScrollPane(textArea);
         jPanel.add(initActionBar(jPanel).getComponent(), BorderLayout.WEST);
