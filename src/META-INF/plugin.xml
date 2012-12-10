@@ -19,12 +19,13 @@
         <action icon="/com/stkiller/idea/reviewplugin/icons/add.png" id="review_aid.add_reason"
                 class="com.stkiller.idea.reviewplugin.actions.AddRejectReasonAction" text="Add Reject Reason"
                 description="Adds a new review reject reason">
-            <keyboard-shortcut keymap="$default" first-keystroke="meta alt R"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt R"/>
         </action>
         <action icon="/com/stkiller/idea/reviewplugin/icons/delete.png" id="review_aid.clear_reasons"
                 class="com.stkiller.idea.reviewplugin.actions.ClearReasonsAction" text="Clear Reasons"
                 description="Clears all reject reasons"/>
-        <action id="review_aid.copy_reasons" icon="/com/stkiller/idea/reviewplugin/icons/add.png" class="com.stkiller.idea.reviewplugin.actions.CopyReasonsAction" text="Copy reasons"
+        <action id="review_aid.copy_reasons" icon="/com/stkiller/idea/reviewplugin/icons/copy.png"
+                class="com.stkiller.idea.reviewplugin.actions.CopyReasonsAction" text="Copy reasons"
                 description="Copy all generated reasons to the clipboard"/>
         <group id="review_aid" text="Review Aid" description="Review aid plugin">
             <add-to-group group-id="CodeMenu" anchor="last"/>

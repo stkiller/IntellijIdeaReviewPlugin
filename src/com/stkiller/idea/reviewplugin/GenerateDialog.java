@@ -17,6 +17,7 @@ public class GenerateDialog extends DialogWrapper {
     private final JTextField textField;
     private final JPanel panel;
 
+
     public GenerateDialog() {
         super(null);
         setTitle("Please Provide a Comment, if Any");
@@ -42,6 +43,7 @@ public class GenerateDialog extends DialogWrapper {
     protected JComponent createCenterPanel() {
         return panel;
     }
+
 
     public String getComment() {
         return textField.getText();
