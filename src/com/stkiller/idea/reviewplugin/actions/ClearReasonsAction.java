@@ -8,8 +8,7 @@ import com.stkiller.idea.reviewplugin.interfaces.RejectReasonListener;
 /**
  * @author andrei (09/12/2012)
  */
-public class ClearReasonsAction extends AnAction implements RejectListenerInteractor
-{
+public class ClearReasonsAction extends AnAction implements RejectListenerInteractor {
 
     private RejectReasonListener reasonListener;
 

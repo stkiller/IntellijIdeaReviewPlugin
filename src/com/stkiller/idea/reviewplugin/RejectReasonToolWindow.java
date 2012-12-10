@@ -7,6 +7,7 @@ import javax.swing.JTextArea;
 
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.project.Project;
@@ -32,6 +33,7 @@ public class RejectReasonToolWindow implements ToolWindowFactory, RejectReasonLi
 
         registerAsRejectReasonListener("review_aid.add_reason");
         registerAsRejectReasonListener("review_aid.clear_reasons");
+        registerAsRejectReasonListener("review_aid.copy_reasons");
     }
 
 
@@ -49,16 +51,20 @@ public class RejectReasonToolWindow implements ToolWindowFactory, RejectReasonLi
         textArea.setEditable(false);
         final JPanel jPanel = new JPanel(new BorderLayout());
         final JBScrollPane scrollPane = new JBScrollPane(textArea);
-        final ActionToolbar actionToolbar = ActionManager.getInstance().createActionToolbar("Test toolbar",
-                                                                                            (ActionGroup)actionManager.getAction(
-                                                                                                    "review_aid.toolbar_actions"), false);
-        actionToolbar.setTargetComponent(jPanel);
-        jPanel.add(actionToolbar.getComponent(), BorderLayout.WEST);
+        jPanel.add(initActionBar(jPanel).getComponent(), BorderLayout.WEST);
         jPanel.add(scrollPane, BorderLayout.CENTER);
         final Content content = contentFactory.createContent(jPanel, "", false);
         toolWindow.getContentManager().addContent(content);
 
 
+    }
+
+
+    private ActionToolbar initActionBar(final JPanel aJPanel) {
+        final ActionToolbar actionToolbar = actionManager.createActionToolbar(ActionPlaces.UNKNOWN, (ActionGroup)actionManager.getAction(
+                "review_aid.toolbar_actions"), false);
+        actionToolbar.setTargetComponent(aJPanel);
+        return actionToolbar;
     }
 
 
