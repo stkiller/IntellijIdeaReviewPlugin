@@ -18,8 +18,13 @@ public class FqnExtractorResult {
     }
 
 
+    public FqnExtractorResult() {
+
+    }
+
+
     public String getElementFqn() {
-        return elementFqn;
+        return elementFqn == null ? "" : elementFqn;
     }
 
 
@@ -29,7 +34,7 @@ public class FqnExtractorResult {
 
 
     public String getElementName() {
-        return elementName;
+        return elementName== null ? "" : elementName;
     }
 
 
@@ -39,7 +44,7 @@ public class FqnExtractorResult {
 
 
     public String getElementLine() {
-        return elementLine;
+        return elementLine == null ? "" : elementLine;
     }
 
 
@@ -49,6 +54,16 @@ public class FqnExtractorResult {
 
 
     public boolean isValid() {
-        return elementFqn != null && elementLine != null;
+        return isElementFqnValid() && isElementLineValid();
+    }
+
+
+    public boolean isElementLineValid() {
+        return elementLine != null;
+    }
+
+
+    public boolean isElementFqnValid() {
+        return elementFqn != null;
     }
 }
