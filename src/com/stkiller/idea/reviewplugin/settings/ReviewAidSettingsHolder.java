@@ -15,13 +15,12 @@ import org.jetbrains.annotations.Nullable;
  */
 @State(
         name = "ReviewAidSettingsHolder",
-        storages = {
-                @Storage(id = "other", file = StoragePathMacros.APP_CONFIG + "/review_aid.xml")
-        }
+        storages = {@Storage(id = "other", file = StoragePathMacros.APP_CONFIG + "/review_aid.xml")}
 )
-public class ReviewAidSettingsHolder implements PersistentStateComponent<ReviewAidSettingsHolder> , ApplicationComponent{
+public class ReviewAidSettingsHolder implements PersistentStateComponent<ReviewAidSettingsHolder>, ApplicationComponent {
 
     public String OUTPUT_FORMAT_REGEX = "{noformat}%1$s:%2$s{noformat}\n%3$s";
+
 
     @Nullable
     @Override
@@ -52,7 +51,8 @@ public class ReviewAidSettingsHolder implements PersistentStateComponent<ReviewA
         return "ReviewAidSettingsHolder";
     }
 
-    public static ReviewAidSettingsHolder getInstance(){
+
+    public static ReviewAidSettingsHolder getInstance() {
         return ApplicationManager.getApplication().getComponent(ReviewAidSettingsHolder.class);
 
     }

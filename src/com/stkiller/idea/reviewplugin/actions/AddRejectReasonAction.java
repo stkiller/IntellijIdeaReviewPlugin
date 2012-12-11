@@ -6,6 +6,7 @@ import com.stkiller.idea.reviewplugin.GenerateDialog;
 import com.stkiller.idea.reviewplugin.interfaces.RejectListenerInteractor;
 import com.stkiller.idea.reviewplugin.interfaces.RejectReasonListener;
 import com.stkiller.idea.reviewplugin.service.FqnExtractor;
+import com.stkiller.idea.reviewplugin.service.FqnExtractorResult;
 import com.stkiller.idea.reviewplugin.service.ReasonFormatter;
 
 /**
@@ -31,18 +32,17 @@ public class AddRejectReasonAction extends AnAction implements RejectListenerInt
 
     @Override
     public void update(final AnActionEvent aEvent) {
-        aEvent.getPresentation().setEnabled(fqnExtractor.processCaretElementFQN(aEvent));
+        aEvent.getPresentation().setEnabled(fqnExtractor.processCaretElementFQN(aEvent).isValid());
     }
 
 
     @Override
     public void actionPerformed(final AnActionEvent aEvent) {
-        fqnExtractor.processCaretElementFQN(aEvent);
+        final FqnExtractorResult result = fqnExtractor.processCaretElementFQN(aEvent);
         final GenerateDialog dlg = new GenerateDialog();
         dlg.show();
         if (dlg.isOK()) {
-            rejectReasonListener.fireAddRejectReason(reasonFormatter.getFormattedReason(fqnExtractor.getElementFqn(),
-                                                                                        fqnExtractor.getElementLine(), dlg.getComment()));
+            rejectReasonListener.fireAddRejectReason(reasonFormatter.getFormattedReason(result, dlg.getComment()));
         }
     }
 

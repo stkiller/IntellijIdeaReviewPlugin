@@ -8,7 +8,7 @@ public class ReasonFormatter {
     }
 
 
-    public String getFormattedReason(final String aElementFQN, final String aLineNumber, final String aComment) {
-        return String.format(ReviewAidSettingsHolder.getInstance().OUTPUT_FORMAT_REGEX, aElementFQN, aLineNumber, aComment);
+    public String getFormattedReason(final FqnExtractorResult result, final String aComment) {
+        return String.format(ReviewAidSettingsHolder.getInstance().OUTPUT_FORMAT_REGEX, result.getElementFqn().replace('.','/'), result.getElementName(), result.getElementLine(), aComment);
     }
 }

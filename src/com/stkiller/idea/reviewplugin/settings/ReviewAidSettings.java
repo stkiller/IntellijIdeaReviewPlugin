@@ -1,7 +1,5 @@
 package com.stkiller.idea.reviewplugin.settings;
 
-import java.awt.BorderLayout;
-
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -16,8 +14,9 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ReviewAidSettings implements Configurable {
 
-    private JTextArea textField;
-    ReviewAidSettingsHolder settingsHolder;
+    private final ReviewAidSettingsHolder settingsHolder;
+    private JPanel generalPanel;
+    private JTextArea formatArea;
 
 
     public ReviewAidSettings() {
@@ -42,27 +41,26 @@ public class ReviewAidSettings implements Configurable {
     @Nullable
     @Override
     public JComponent createComponent() {
-        textField = new JTextArea(settingsHolder.OUTPUT_FORMAT_REGEX);
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(textField, BorderLayout.NORTH);
-        return panel;
+        reset();
+        return generalPanel;
     }
 
 
     @Override
     public boolean isModified() {
-        return !settingsHolder.OUTPUT_FORMAT_REGEX.equals(textField.getText());
+        return !settingsHolder.OUTPUT_FORMAT_REGEX.equals(formatArea.getText());
     }
 
 
     @Override
     public void apply() throws ConfigurationException {
-        settingsHolder.OUTPUT_FORMAT_REGEX = textField.getText();
+        settingsHolder.OUTPUT_FORMAT_REGEX = formatArea.getText();
     }
 
 
     @Override
     public void reset() {
+        formatArea.setText(settingsHolder.OUTPUT_FORMAT_REGEX);
     }
 
 

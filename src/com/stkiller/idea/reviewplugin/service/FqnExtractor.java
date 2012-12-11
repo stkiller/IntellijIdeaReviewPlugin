@@ -31,42 +31,31 @@ import org.jetbrains.annotations.Nullable;
 
 public class FqnExtractor {
 
-    private String elementFqn;
 
-
-    private String elementLine;
-
-    public String getElementFqn() {
-        return elementFqn;
-    }
-
-
-    public String getElementLine() {
-        return elementLine;
-    }
-
-
-    public boolean processCaretElementFQN(final AnActionEvent aEvent) {
-        elementFqn = null;
-        elementLine = null;
+    public FqnExtractorResult processCaretElementFQN(final AnActionEvent aEvent) {
 
         final DataContext dataContext = aEvent.getDataContext();
 
         final Project project = PlatformDataKeys.PROJECT.getData(dataContext);
         final Editor editor = PlatformDataKeys.EDITOR.getData(dataContext);
         final PsiElement elementAt = getElement(editor, dataContext);
-        elementFqn = getElementFqn(editor, elementAt);
+        final FqnExtractorResult fqnExtractorResult = getElementFqn(editor, elementAt);
         if (editor != null && project != null) {
             final Document document = editor.getDocument();
             final PsiFile file = PsiDocumentManager.getInstance(project).getCachedPsiFile(document);
             if (file != null) {
-                if (elementFqn == null) {
-                    elementFqn = getFileFqn(file);
+                if (fqnExtractorResult.getElementFqn() == null) {
+                    fqnExtractorResult.setElementFqn(getFileFqn(file));
                 }
-                elementLine = ""+(editor.getCaretModel().getLogicalPosition().line + 1);
+                fqnExtractorResult.setElementLine(getLineNumber(editor));
             }
         }
-        return elementFqn != null && elementLine != null;
+        return fqnExtractorResult;
+    }
+
+
+    private String getLineNumber(final Editor aEditor) {
+        return "" + (aEditor.getCaretModel().getLogicalPosition().line + 1);
     }
 
 
@@ -104,8 +93,8 @@ public class FqnExtractor {
     }
 
 
-    private String getElementFqn(final Editor aEditor, final PsiElement aElementAt) {
-        String result = getQualifiedNameFromProviders(aElementAt);
+    private FqnExtractorResult getElementFqn(final Editor aEditor, final PsiElement aElementAt) {
+        FqnExtractorResult result = getQualifiedNameFromProviders(aElementAt);
         if (result != null) {
             return result;
         }
@@ -119,24 +108,22 @@ public class FqnExtractor {
                 }
             }
         }
-
-        String fqn = null;
         if (aElementAt instanceof PsiFile) {
             final PsiFile file = (PsiFile)aElementAt;
-            fqn = FileUtil.toSystemIndependentName(getFileFqn(file));
+            result = new FqnExtractorResult(FileUtil.toSystemIndependentName(getFileFqn(file)));
         }
-        return fqn;
+        return result;
     }
 
 
     @Nullable
-    private String getQualifiedNameFromProviders(@Nullable PsiElement element) {
+    private FqnExtractorResult getQualifiedNameFromProviders(@Nullable PsiElement element) {
         if (element instanceof PsiPackage) {
-            return ((PsiPackage)element).getQualifiedName();
+            return new FqnExtractorResult(((PsiPackage)element).getQualifiedName());
         }
         element = getMember(element);
         if (element instanceof PsiClass) {
-            return ((PsiClass)element).getQualifiedName();
+            return new FqnExtractorResult(((PsiClass)element).getQualifiedName());
         } else if (element instanceof PsiMember) {
             final PsiMember member = (PsiMember)element;
             PsiClass containingClass = member.getContainingClass();
@@ -148,15 +135,15 @@ public class FqnExtractor {
             }
             final String classFqn = containingClass.getQualifiedName();
             if (classFqn == null) {
-                return member.getName();  // refer to member of anonymous class by simple name
+                return new FqnExtractorResult(member.getName());  // refer to member of anonymous class by simple name
             }
-            return classFqn + "#" + member.getName();
+            return new FqnExtractorResult(classFqn, member.getName());
         }else if (element instanceof PsiReference) {
             final PsiReference reference = (PsiReference)element;
             final PsiFile containingFile = reference.getElement().getContainingFile();
             String fileName = getFileFqn(containingFile);
             fileName = FileUtil.getNameWithoutExtension(fileName);
-            return fileName + "#" + reference.getCanonicalText();
+            return new FqnExtractorResult(fileName, reference.getCanonicalText());
         }
         return null;
     }
