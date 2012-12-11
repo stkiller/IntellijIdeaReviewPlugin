@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 )
 public class ReviewAidSettingsHolder implements PersistentStateComponent<ReviewAidSettingsHolder>, ApplicationComponent {
 
-    public String OUTPUT_FORMAT_REGEX = "{noformat}%1$s:%2$s{noformat}\n%3$s";
+    public String OUTPUT_FORMAT_REGEX = "{noformat}%1$s:%3$s[%2$s]{noformat}\n%4$s";
 
 
     @Nullable
