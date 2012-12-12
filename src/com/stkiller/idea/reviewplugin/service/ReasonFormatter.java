@@ -9,6 +9,7 @@ public class ReasonFormatter {
 
 
     public String getFormattedReason(final FqnExtractorResult result, final String aComment) {
-        return String.format(ReviewAidSettingsHolder.getInstance().OUTPUT_FORMAT_REGEX, result.getElementFqn().replace('.','/'), result.getElementName(), result.getElementLine(), aComment);
+        return String.format(ReviewAidSettingsHolder.getInstance().OUTPUT_FORMAT_REGEX, result.getElementFqn(), result.getElementName(),
+                             result.getElementLine(), aComment);
     }
 }

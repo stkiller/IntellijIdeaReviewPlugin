@@ -44,13 +44,17 @@ public class FqnExtractor {
             final Document document = editor.getDocument();
             final PsiFile file = PsiDocumentManager.getInstance(project).getCachedPsiFile(document);
             if (file != null) {
-                if (fqnExtractorResult.getElementFqn() == null) {
-                    fqnExtractorResult.setElementFqn(getFileFqn(file));
-                }
+                fqnExtractorResult.setElementFqn(getFileFqn(file));
                 fqnExtractorResult.setElementLine(getLineNumber(editor));
+                fqnExtractorResult.setElementColumn(getColumn(editor));
             }
         }
         return fqnExtractorResult;
+    }
+
+
+    private String getColumn(final Editor aEditor) {
+        return "" + (aEditor.getCaretModel().getOffset());
     }
 
 
@@ -112,7 +116,7 @@ public class FqnExtractor {
             final PsiFile file = (PsiFile)aElementAt;
             result = new FqnExtractorResult(FileUtil.toSystemIndependentName(getFileFqn(file)));
         }
-        return result;
+        return result == null ? new FqnExtractorResult() : result;
     }
 
 
@@ -138,7 +142,7 @@ public class FqnExtractor {
                 return new FqnExtractorResult(member.getName());  // refer to member of anonymous class by simple name
             }
             return new FqnExtractorResult(classFqn, member.getName());
-        }else if (element instanceof PsiReference) {
+        } else if (element instanceof PsiReference) {
             final PsiReference reference = (PsiReference)element;
             final PsiFile containingFile = reference.getElement().getContainingFile();
             String fileName = getFileFqn(containingFile);
@@ -180,14 +184,13 @@ public class FqnExtractor {
         final LogicalRoot logicalRoot = LogicalRootsManager.getLogicalRootsManager(project).findLogicalRoot(virtualFile);
         if (logicalRoot != null) {
             final String logical = FileUtil.toSystemIndependentName(VfsUtil.virtualToIoFile(logicalRoot.getVirtualFile()).getPath());
-            final String path = FileUtil.toSystemIndependentName(VfsUtil.virtualToIoFile(virtualFile).getPath());
-            return "/" + FileUtil.getRelativePath(logical, path, '/');
+            return FileUtil.toSystemIndependentName(VfsUtil.virtualToIoFile(virtualFile).getPath());
         }
 
         final VirtualFile contentRoot = ProjectRootManager.getInstance(project).getFileIndex().getContentRootForFile(virtualFile);
         if (contentRoot != null) {
-            return "/" + FileUtil.getRelativePath(VfsUtil.virtualToIoFile(contentRoot), VfsUtil.virtualToIoFile(virtualFile));
+            return FileUtil.toSystemIndependentName(VfsUtil.virtualToIoFile(virtualFile).getAbsolutePath());
         }
-        return virtualFile.getPath();
+        return FileUtil.toSystemIndependentName(virtualFile.getPath());
     }
 }

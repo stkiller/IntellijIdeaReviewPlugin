@@ -7,6 +7,19 @@ public class FqnExtractorResult {
     private String elementLine;
 
 
+    public String getElementColumn() {
+        return elementColumn;
+    }
+
+
+    public void setElementColumn(final String aElementColumn) {
+        elementColumn = aElementColumn;
+    }
+
+
+    private String elementColumn;
+
+
     public FqnExtractorResult(final String aElementFqn) {
         elementFqn = aElementFqn;
     }
@@ -34,7 +47,7 @@ public class FqnExtractorResult {
 
 
     public String getElementName() {
-        return elementName== null ? "" : elementName;
+        return elementName == null ? "" : elementName;
     }
 
 

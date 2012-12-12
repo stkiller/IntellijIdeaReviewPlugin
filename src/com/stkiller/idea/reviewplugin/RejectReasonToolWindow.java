@@ -3,17 +3,22 @@ package com.stkiller.idea.reviewplugin;
 import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 
+import com.intellij.execution.filters.RegexpFilter;
+import com.intellij.execution.impl.ConsoleViewImpl;
+import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
-import com.intellij.ui.components.JBScrollPane;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.stkiller.idea.reviewplugin.interfaces.RejectListenerInteractor;
@@ -24,8 +29,9 @@ import com.stkiller.idea.reviewplugin.interfaces.RejectReasonListener;
  */
 public class RejectReasonToolWindow implements ToolWindowFactory, RejectReasonListener {
 
-    private final JTextArea textArea = new JTextArea();
     private final ActionManager actionManager;
+    private ConsoleViewImpl console;
+    private Project project;
 
 
     public RejectReasonToolWindow() {
@@ -47,11 +53,13 @@ public class RejectReasonToolWindow implements ToolWindowFactory, RejectReasonLi
 
     // Create the tool window content.
     public void createToolWindowContent(final Project project, final ToolWindow toolWindow) {
+        this.project = project;
         final ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         final JPanel jPanel = new JPanel(new BorderLayout());
-        final JBScrollPane scrollPane = new JBScrollPane(textArea);
+        console = new ConsoleViewImpl(project, GlobalSearchScope.allScope(project), false, null);
+        console.addMessageFilter(new RegexpFilter(project, RegexpFilter.FILE_PATH_MACROS + ":" + RegexpFilter.LINE_MACROS + ".*"));
         jPanel.add(initActionBar(jPanel).getComponent(), BorderLayout.WEST);
-        jPanel.add(scrollPane, BorderLayout.CENTER);
+        jPanel.add(console.getComponent(), BorderLayout.CENTER);
         final Content content = contentFactory.createContent(jPanel, "", false);
         toolWindow.getContentManager().addContent(content);
 
@@ -69,19 +77,26 @@ public class RejectReasonToolWindow implements ToolWindowFactory, RejectReasonLi
 
     @Override
     public void fireAddRejectReason(final String aRejectReason) {
-        textArea.setText(textArea.getText() + aRejectReason + "\n");
+        console.print(aRejectReason + "\n", ConsoleViewContentType.NORMAL_OUTPUT);
 
     }
 
 
     @Override
     public void resetRejectReasons() {
-        textArea.setText("");
+        console.clear();
     }
 
 
     @Override
     public String getGeneratedRejectReasons() {
-        return textArea.getText();
+        final Object editor = console.getData(PlatformDataKeys.EDITOR.getName());
+        if ((editor instanceof Editor)) {
+            final String text = ((Editor)editor).getDocument().getText();
+            if (text != null) {
+                return text.replaceAll(FileUtil.toSystemIndependentName(project.getBasePath()), "");
+            }
+        }
+        return null;
     }
 }
