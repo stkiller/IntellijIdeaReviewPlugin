@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 
+import com.intellij.execution.filters.HyperlinkInfo;
 import com.intellij.execution.filters.RegexpFilter;
 import com.intellij.execution.impl.ConsoleViewImpl;
 import com.intellij.execution.ui.ConsoleViewContentType;
@@ -23,6 +24,8 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.stkiller.idea.reviewplugin.interfaces.RejectListenerInteractor;
 import com.stkiller.idea.reviewplugin.interfaces.RejectReasonListener;
+import com.stkiller.idea.reviewplugin.service.StatusBarMessenger;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Andrei Podoprigora
@@ -57,7 +60,13 @@ public class RejectReasonToolWindow implements ToolWindowFactory, RejectReasonLi
         final ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         final JPanel jPanel = new JPanel(new BorderLayout());
         console = new ConsoleViewImpl(project, GlobalSearchScope.allScope(project), false, null);
-        console.addMessageFilter(new RegexpFilter(project, RegexpFilter.FILE_PATH_MACROS + ":" + RegexpFilter.LINE_MACROS + ".*"));
+        console.addMessageFilter(new RegexpFilter(project, RegexpFilter.FILE_PATH_MACROS + ":" + RegexpFilter.LINE_MACROS+".+$"){
+            @Nullable
+            @Override
+            protected HyperlinkInfo createOpenFileHyperlink(final String fileName, final int line, final int column) {
+                return super.createOpenFileHyperlink(fileName, line, column);
+            }
+        });
         jPanel.add(initActionBar(jPanel).getComponent(), BorderLayout.WEST);
         jPanel.add(console.getComponent(), BorderLayout.CENTER);
         final Content content = contentFactory.createContent(jPanel, "", false);
@@ -77,19 +86,36 @@ public class RejectReasonToolWindow implements ToolWindowFactory, RejectReasonLi
 
     @Override
     public void fireAddRejectReason(final String aRejectReason) {
+        if (console == null) {
+            processNullConsole();
+            return;
+        }
         console.print(aRejectReason + "\n", ConsoleViewContentType.NORMAL_OUTPUT);
 
     }
 
 
+    private void processNullConsole() {
+        StatusBarMessenger.setStatusBarInfo(project, "The action cannot be completed, as the console is null");
+    }
+
+
     @Override
     public void resetRejectReasons() {
+        if (console == null) {
+            processNullConsole();
+            return;
+        }
         console.clear();
     }
 
 
     @Override
     public String getGeneratedRejectReasons() {
+        if (console == null) {
+            processNullConsole();
+            return null;
+        }
         final Object editor = console.getData(PlatformDataKeys.EDITOR.getName());
         if ((editor instanceof Editor)) {
             final String text = ((Editor)editor).getDocument().getText();
