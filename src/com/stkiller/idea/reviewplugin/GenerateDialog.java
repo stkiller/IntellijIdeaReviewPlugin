@@ -24,7 +24,6 @@ public class GenerateDialog extends DialogWrapper {
         setTitle("Please Provide a Comment, if Any");
 
         textField = new JTextArea();
-//        textField.setMinimumSize(new Dimension(300, 100));
         textField.setPreferredSize(new Dimension(300, 100));
         panel = new JPanel(new BorderLayout());
         panel.add(textField, BorderLayout.CENTER);

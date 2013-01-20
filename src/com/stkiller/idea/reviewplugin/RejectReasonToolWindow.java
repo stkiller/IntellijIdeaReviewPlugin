@@ -47,32 +47,45 @@ public class RejectReasonToolWindow implements ToolWindowFactory, RejectReasonLi
 
 
     private void registerAsRejectReasonListener(final String aActionId) {
-        final AnAction clearReviewAidScreen = actionManager.getAction(aActionId);
-        if (clearReviewAidScreen instanceof RejectListenerInteractor) {
-            ((RejectListenerInteractor)clearReviewAidScreen).setRejectReasonListener(this);
+        final AnAction action = actionManager.getAction(aActionId);
+        if (action instanceof RejectListenerInteractor) {
+            ((RejectListenerInteractor)action).setRejectReasonListener(this);
         }
     }
 
 
-    // Create the tool window content.
+    @Override
     public void createToolWindowContent(final Project project, final ToolWindow toolWindow) {
         this.project = project;
-        final ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-        final JPanel jPanel = new JPanel(new BorderLayout());
-        console = new ConsoleViewImpl(project, GlobalSearchScope.allScope(project), false, null);
-        console.addMessageFilter(new RegexpFilter(project, RegexpFilter.FILE_PATH_MACROS + ":" + RegexpFilter.LINE_MACROS+".+$"){
+        initConsole();
+        initContent(toolWindow);
+    }
+
+
+    private void initConsole() {
+        console = new ConsoleViewImpl(project, GlobalSearchScope.allScope(project), true, null);
+        console.addMessageFilter(new RegexpFilter(project, RegexpFilter.FILE_PATH_MACROS + ":" + RegexpFilter.LINE_MACROS) {
             @Nullable
             @Override
             protected HyperlinkInfo createOpenFileHyperlink(final String fileName, final int line, final int column) {
                 return super.createOpenFileHyperlink(fileName, line, column);
             }
         });
+    }
+
+
+    private void initContent(final ToolWindow toolWindow) {
+        final ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+        final Content content = contentFactory.createContent(initPanel(), "", false);
+        toolWindow.getContentManager().addContent(content);
+    }
+
+
+    private JPanel initPanel() {
+        final JPanel jPanel = new JPanel(new BorderLayout());
         jPanel.add(initActionBar(jPanel).getComponent(), BorderLayout.WEST);
         jPanel.add(console.getComponent(), BorderLayout.CENTER);
-        final Content content = contentFactory.createContent(jPanel, "", false);
-        toolWindow.getContentManager().addContent(content);
-
-
+        return jPanel;
     }
 
 
