@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <name>Review Aid</name>
     <description>A simple plugin that allows to add comments to the selected code</description>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <vendor>Andrei Podoprigora</vendor>
     <!--
     <idea-version since-build="8000"/>
