@@ -25,6 +25,8 @@ public class GenerateDialog extends DialogWrapper {
 
         textField = new JTextArea();
         textField.setPreferredSize(new Dimension(300, 100));
+        textField.setLineWrap(true);
+
         panel = new JPanel(new BorderLayout());
         panel.add(textField, BorderLayout.CENTER);
 
